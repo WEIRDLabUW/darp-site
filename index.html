@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DARP</title>
+	<link rel="shortcut icon" href="https://www.cs.washington.edu/wp-content/themes/uw_wp_theme/favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <!-- Progress Sidebar -->
+  <nav class="progress-sidebar" aria-label="Page progress">
+    <div class="progress-track">
+      <div class="progress-line"></div>
+      <div class="progress-line-fill"></div>
+      <div class="progress-item" data-section="hero">
+        <a href="#">
+          <span class="progress-dot"></span>
+          <span class="progress-label">Intro</span>
+        </a>
+      </div>
+      <div class="progress-item" data-section="architecture">
+        <a href="#architecture">
+          <span class="progress-dot"></span>
+          <span class="progress-label">Architecture</span>
+        </a>
+      </div>
+      <div class="progress-item" data-section="results">
+        <a href="#results">
+          <span class="progress-dot"></span>
+          <span class="progress-label">Results</span>
+        </a>
+      </div>
+      <div class="progress-item" data-section="divergence">
+        <a href="#divergence">
+          <span class="progress-dot"></span>
+          <span class="progress-label">Divergence Analysis</span>
+        </a>
+      </div>
+      <div class="progress-item" data-section="multimodal">
+        <a href="#multimodal">
+          <span class="progress-dot"></span>
+          <span class="progress-label">Multimodal Distributions</span>
+        </a>
+      </div>
+      <div class="progress-item" data-section="diffusion">
+        <a href="#diffusion">
+          <span class="progress-dot"></span>
+          <span class="progress-label">Diffusion Policy</span>
+        </a>
+      </div>
+      <div class="progress-item" data-section="bibtex">
+        <a href="#bibtex">
+          <span class="progress-dot"></span>
+          <span class="progress-label">BibTeX</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div class="hero-flow">
+      <div class="hero-text">DARP</div>
+      <div class="sub-hero-text">Difference-Aware Retrieval Policies for Imitation Learning</div>
+
+      <div class="authors">
+        <a href="https://quinn.computer" target="_blank">Quinn Pfeifer</a><sup>1</sup>,
+        <a href="https://www.linkedin.com/in/epronovost/" target="_blank">Ethan Pronovost</a><sup>1</sup>,
+        <a href="https://www.linkedin.com/in/paarth-shah-bb6743b1/" target="_blank">Paarth Shah</a><sup>2</sup>,
+        <a href="https://kkhetarpal.github.io/" target="_blank">Khimya Khetarpal</a><sup>3</sup>,
+        <a href="https://homes.cs.washington.edu/~abhgupta/" target="_blank">Abhishek Gupta</a><sup>1</sup>,
+        <a href="https://goodrobot.ai/" target="_blank">Siddhartha Srinivasa</a><sup>1</sup><br>
+        <span class="affiliation">
+          <sup>1</sup>University of Washington, <sup>2</sup>Toyota Research Institute, <sup>3</sup>Google DeepMind
+        </span>
+      </div>
+      <div class="hero-actions">
+        <a class="cta primary" href="https://openreview.net/pdf?id=9AA27en4go" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
+            style="vertical-align: -2px; margin-right: 6px;">
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6zm2-6h8v2H8v-2zm0-4h4v2H8v-2zm0 8h8v2H8v-2z" />
+          </svg>
+          Read the paper
+        </a>
+        <a class="cta dark" href="https://github.com/WEIRDLabUW/darp" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+            style="vertical-align: -3px; margin-right: 6px;">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+          Code
+        </a>
+        <a class="cta colab" href="https://drive.google.com/file/d/1N0kBjaT773HkzESaXw884wmsmEpZJjEy/view?usp=sharing" target="_blank">
+            <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 32px; height: 32px; vertical-align: -3px; margin-right: 6px;"><g>
+      <path d="M4.54,9.46,2.19,7.1a6.93,6.93,0,0,0,0,9.79l2.36-2.36A3.59,3.59,0,0,1,4.54,9.46Z" style="" fill="#E8710A"/>
+      <path d="M2.19,7.1,4.54,9.46a3.59,3.59,0,0,1,5.08,0l1.71-2.93h0l-.1-.08h0A6.93,6.93,0,0,0,2.19,7.1Z" style="" fill="#F9AB00"/>
+      <path d="M11.34,17.46h0L9.62,14.54a3.59,3.59,0,0,1-5.08,0L2.19,16.9a6.93,6.93,0,0,0,9,.65l.11-.09" style="" fill="#F9AB00"/>
+      <path d="M12,7.1a6.93,6.93,0,0,0,0,9.79l2.36-2.36a3.59,3.59,0,1,1,5.08-5.08L21.81,7.1A6.93,6.93,0,0,0,12,7.1Z" style="" fill="#F9AB00"/>
+      <path d="M21.81,7.1,19.46,9.46a3.59,3.59,0,0,1-5.08,5.08L12,16.9A6.93,6.93,0,0,0,21.81,7.1Z" style="" fill="#E8710A"/>
+    </g></svg>
+          Google Colab
+        </a>
+      </div>
+
+      <!-- Hero Pipeline Animation -->
+      <div class="hero-pipeline-container">
+        <canvas id="heroPipelineCanvas"></canvas>
+      </div>
+
+    </div>
+
+    <!-- DARP Architecture Section -->
+    <div id="architecture" class="architecture-section">
+      <div class="tagline">DARP Architecture</div>
+      <p class="section-description">
+        Hover over the state space to preview neighbors, then click to lock in a query state and see how DARP processes it through neighbor retrieval, 
+        difference vector calculation, and aggregation. Watch how the predicted action (blue) emerges from averaging neighbor actions. Click again to unlock your query point and enter hover mode again.
+      </p>
+
+      <div class="architecture-container">
+        <!-- Left: State Space & Retrieval -->
+        <div class="arch-panel">
+          <div class="panel-title">1. Retrieve Neighbors & Visualize Inputs</div>
+          <canvas id="architectureCanvas" class="arch-canvas"></canvas>
+          <div class="arch-legend">
+            <div class="legend-row">
+              <span class="legend-dot query-dot"></span>
+              <span>Query State (s<sub>q</sub>)</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-dot neighbor-dot"></span>
+              <span>Neighbor State (s*)</span>
+            </div>
+            <div class="legend-row">
+              <svg width="24" height="12" style="vertical-align: middle;">
+                <defs>
+                  <marker id="legend-action" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <polygon points="0 0, 6 3, 0 6" fill="#dc2626" />
+                  </marker>
+                </defs>
+                <line x1="0" y1="6" x2="24" y2="6" stroke="#dc2626" stroke-width="1.5" marker-end="url(#legend-action)" />
+              </svg>
+              <span>Action (a*)</span>
+            </div>
+            <div class="legend-row">
+              <svg width="24" height="12" style="vertical-align: middle;">
+                <defs>
+                  <marker id="legend-delta" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <polygon points="0 0, 6 3, 0 6" fill="#16a34a" />
+                  </marker>
+                </defs>
+                <line x1="0" y1="6" x2="24" y2="6" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#legend-delta)" />
+              </svg>
+              <span>Difference (Δ)</span>
+            </div>
+            <div class="legend-row">
+              <svg width="24" height="12" style="vertical-align: middle;">
+                <defs>
+                  <marker id="legend-prediction" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <polygon points="0 0, 6 3, 0 6" fill="#2563eb" />
+                  </marker>
+                </defs>
+                <line x1="0" y1="6" x2="24" y2="6" stroke="#2563eb" stroke-width="1.5" marker-end="url(#legend-prediction)" />
+              </svg>
+              <span>Predicted Action (â<sub>q</sub>)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle: Processing -->
+        <div class="arch-panel">
+          <div class="panel-title">2. Process Each Neighbor: f<sub>θ</sub>(s*, a*, Δ) → a'</div>
+          <div id="neighborCards" class="neighbor-cards">
+            <div class="empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 6v6l4 2"></path>
+              </svg>
+              <p>Click a query state to begin</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Aggregation -->
+        <div class="arch-panel">
+          <div class="panel-title">3. Aggregate: â<sub>q</sub> = g<sub>ψ</sub>({a'<sub>1</sub>, ..., a'<sub>k</sub>})</div>
+          <div id="aggregationPanel" class="aggregation-panel">
+            <div class="empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+              </svg>
+              <p>Awaiting neighbor predictions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="architecture-explanation">
+        <h3>How DARP Works</h3>
+        <div class="explanation-grid">
+          <div class="explanation-item">
+            <div class="explanation-number">1</div>
+            <div class="explanation-content">
+              <strong>Retrieve Neighbors & Compute Differences</strong>
+              <p>For query state <code>s<sub>q</sub></code>, find the k closest states from expert demonstrations. For each neighbor, calculate the difference vector <code>Δ<sub>i</sub> = s*<sub>i</sub> - s<sub>q</sub></code> and form input tuple <code>(s*<sub>i</sub>, a*<sub>i</sub>, Δ<sub>i</sub>)</code>.</p>
+            </div>
+          </div>
+          <div class="explanation-item">
+            <div class="explanation-number">2</div>
+            <div class="explanation-content">
+              <strong>Predict Action Per Neighbor</strong>
+              <p>Pass each tuple through network <code>f<sub>θ</sub></code> to get action candidate: <code>a'<sub>i</sub> = f<sub>θ</sub>(s*<sub>i</sub>, a*<sub>i</sub>, Δ<sub>i</sub>)</code>. This processes each neighbor independently.</p>
+            </div>
+          </div>
+          <div class="explanation-item">
+            <div class="explanation-number">3</div>
+            <div class="explanation-content">
+              <strong>Aggregate Predictions</strong>
+              <p>Combine all action candidates via permutation-invariant function: <code>â<sub>q</sub> = g<sub>ψ</sub>({a'<sub>1</sub>, ..., a'<sub>k</sub>})</code>. The final prediction is typically an average of individual predictions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="demo-disclaimer">Note: This is a simplified simulation for illustration purposes and does not use an actual trained DARP model.</p>
+    </div>
+
+
+    <!-- Results Section -->
+    <div id="results" class="results-section">
+      <div class="tagline">Results</div>
+      <!-- Domain Selector -->
+      <div class="domain-selector">
+        <button class="domain-btn active" data-tab="robocasa">
+          <span class="icon is-small">
+            <i class="fas fa-home"></i>
+          </span>
+          <span>Robocasa</span>
+        </button>
+        <button class="domain-btn" data-tab="robosuite">
+          <span class="icon is-small">
+            <i class="fas fa-robot"></i>
+          </span>
+          <span>Robosuite</span>
+        </button>
+        <button class="domain-btn" data-tab="mujoco">
+          <span class="icon is-small">
+            <i class="fas fa-horse"></i>
+          </span>
+          <span>MuJoCo</span>
+        </button>
+      </div>
+
+      <!-- MuJoCo Content -->
+      <div id="mujoco-content" class="domain-content">
+        <div class="results-layout">
+          <!-- Carousel Side -->
+          <div class="carousel-side">
+            <div class="results-carousel" id="carousel-mujoco">
+              
+              <!-- Slide 1: Hopper -->
+              <div class="carousel-item active">
+                <p class="slide-title">Task: Hopper</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/hopper_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/hopper_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Ant -->
+              <div class="carousel-item">
+                <p class="slide-title">Task: Ant</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/ant_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/ant_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Walker -->
+              <div class="carousel-item">
+                <p class="slide-title">Task: Walker</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/walker_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/walker_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 4: HalfCheetah -->
+              <div class="carousel-item">
+                <p class="slide-title">Task: HalfCheetah</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/halfcheetah_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/mujoco/halfcheetah_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <button class="carousel-nav prev" data-carousel="mujoco">‹</button>
+            <button class="carousel-nav next" data-carousel="mujoco">›</button>
+          </div>
+
+          <!-- Table Side -->
+          <div class="table-side">
+            <div class="results-box">
+              <h4 class="box-title">Performance (Return)</h4>
+              <table class="results-table">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>BC</th>
+                    <th>DARP (Ours)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Hopper</td>
+                    <td>2313.65 ± 203.75</td>
+                    <td><strong>3545.57 ± 3.54</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Ant</td>
+                    <td>2376.20 ± 339.43</td>
+                    <td><strong>4383.28 ± 266.37</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Walker</td>
+                    <td>2658.40 ± 274.08</td>
+                    <td><strong>4894.01 ± 75.12</strong></td>
+                  </tr>
+                  <tr>
+                    <td>HalfCheetah</td>
+                    <td>1063.23 ± 371.08</td>
+                    <td><strong>5515.41 ± 841.33</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="table-note">Scores averaged across 100 trials with 95% confidence intervals.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Robosuite Content -->
+      <div id="robosuite-content" class="domain-content">
+        <div class="results-layout">
+          <!-- Carousel Side -->
+          <div class="carousel-side">
+            <div class="results-carousel" id="carousel-robosuite">
+              
+              <!-- Slide 1: Stack -->
+              <div class="carousel-item active">
+                <p class="slide-title">Task: Stack</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robosuite/stack_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robosuite/stack_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Threading -->
+              <div class="carousel-item">
+                <p class="slide-title">Task: Threading</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robosuite/thread_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robosuite/thread_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Peg Insertion -->
+              <div class="carousel-item">
+                <p class="slide-title">Task: Peg Insertion</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robosuite/square_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robosuite/square_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <button class="carousel-nav prev" data-carousel="robosuite">‹</button>
+            <button class="carousel-nav next" data-carousel="robosuite">›</button>
+          </div>
+
+          <!-- Table Side -->
+          <div class="table-side">
+            <div class="results-box">
+              <h4 class="box-title" style="margin-top: 2rem;">Success Rate (%) w/ Image Embeddings</h4>
+              <table class="results-table">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>BC</th>
+                    <th>DARP (Ours)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Stack</td>
+                    <td>44%</td>
+                    <td><strong>75%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Threading</td>
+                    <td>38%</td>
+                    <td><strong>76%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Peg Insertion</td>
+                    <td>17%</td>
+                    <td><strong>52%</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h4 class="box-title">Success Rate (%) w/ Low-Dimensional State</h4>
+
+              <table class="results-table">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>BC</th>
+                    <th>DARP (Ours)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Stack</td>
+                    <td>47%</td>
+                    <td><strong>72%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Threading</td>
+                    <td>37%</td>
+                    <td><strong>63%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Peg Insertion</td>
+                    <td>46%</td>
+                    <td><strong>62%</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="table-note">Success rate over 100 trials.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Robocasa Content -->
+      <div id="robocasa-content" class="domain-content active">
+        <div class="results-layout">
+          <!-- Carousel Side -->
+          <div class="carousel-side">
+            <div class="results-carousel" id="carousel-robocasa">
+              
+              <!-- Slide 1: Close Drawer -->
+              <div class="carousel-item active">
+                <p class="slide-title">Task: Close Drawer</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robocasa/drawer_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robocasa/drawer_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Close Door -->
+              <div class="carousel-item">
+                <p class="slide-title">Task: Close Door</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robocasa/door_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robocasa/door_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Turn on Stove -->
+              <div class="carousel-item">
+                <p class="slide-title">Task: Turn on Stove</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">BC</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robocasa/stove_bc_fail.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/robocasa/stove_darp_success.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <button class="carousel-nav prev" data-carousel="robocasa">‹</button>
+            <button class="carousel-nav next" data-carousel="robocasa">›</button>
+          </div>
+
+          <!-- Table Side -->
+          <div class="table-side">
+            <div class="results-box">
+              <h4 class="box-title">Success Rate (%)</h4>
+              <table class="results-table">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>BC</th>
+                    <th>DARP (Ours)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Close Drawer</td>
+                    <td>54%</td>
+                    <td><strong>85%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Close Door</td>
+                    <td>29%</td>
+                    <td><strong>45%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Turn on Stove</td>
+                    <td>28%</td>
+                    <td><strong>43%</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="table-note">Success rate over 100 trials.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divergence Analysis Section - Insert this after the co-training section -->
+    <div id="divergence" class="divergence-section">
+      <div class="tagline">Divergence Analysis</div>
+      <p class="section-description">
+        Watch how BC and DARP behave when they drift out-of-distribution. While both agents' states become unlikely under the expert distribution, 
+        DARP's difference vectors to nearest neighbors remain in-distribution, enabling stable recovery.
+      </p>
+
+      <div class="divergence-canvas-container">
+        <canvas id="divergenceCanvas"></canvas>
+        
+        <div class="divergence-controls">
+          <button id="divergenceRestart" class="divergence-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            Restart
+          </button>
+          <button id="divergencePlay" class="divergence-btn primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Play
+          </button>
+        </div>
+
+        <div class="divergence-legend">
+          <div class="legend-item">
+            <div class="legend-dot expert-dot"></div>
+            <span>Expert Demonstrations</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot bc-dot"></div>
+            <span>BC Agent (OOD State)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot darp-dot"></div>
+            <span>DARP Agent (OOD State, ID Δ)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divergence-metrics">
+        <div class="metric-card">
+          <div class="metric-label">BC State Likelihood</div>
+          <div class="metric-bar-container">
+            <div id="bcStateLikelihood" class="metric-bar bc-metric"></div>
+          </div>
+          <div class="metric-value" id="bcStateValue">100%</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">DARP State Likelihood</div>
+          <div class="metric-bar-container">
+            <div id="darpStateLikelihood" class="metric-bar darp-metric"></div>
+          </div>
+          <div class="metric-value" id="darpStateValue">100%</div>
+        </div>
+
+        <div class="metric-card highlight">
+          <div class="metric-label">DARP Δ Likelihood</div>
+          <div class="metric-bar-container">
+            <div id="darpDeltaLikelihood" class="metric-bar delta-metric"></div>
+          </div>
+          <div class="metric-value" id="darpDeltaValue">100%</div>
+        </div>
+      </div>
+
+      <div class="divergence-explanation">
+        <p><strong>Key Insight:</strong> As the animation progresses, BC (red) drifts away from the expert demonstrations and 
+        its state likelihood drops significantly. DARP (green) experiences similar perturbations but <strong>recovers and stays near the expert manifold</strong> 
+        because its difference vectors <strong>Δ = s* - s<sub>q</sub></strong> to nearest neighbors remain in-distribution (~90%). 
+        These difference vectors are similar to the distances between expert demonstration states, enabling DARP to make reliable predictions and maintain stability.</p>
+      </div>
+      <p class="demo-disclaimer">Note: This is a simplified simulation for illustration purposes and does not use an actual trained DARP model. See section 3.4 in the paper for plots generated with trained DARP models.</p>
+    </div>
+
+    <!-- Multimodal Aggregation Section -->
+    <div id="multimodal" class="multimodal-section">
+        <div class="tagline">Handling Multimodal Action Distributions</div>
+        
+        <div class="section-intro">
+          <p>
+            While simple averaging works well for unimodal action distributions, many robotic tasks 
+            require representing multimodal behaviors. DARP can be extended to use more complex 
+            permutation-invariant aggregation functions like Set Transformers or Deep Sets to handle 
+            complex, multimodal action distributions.
+          </p>
+        </div>
+
+        <div class="multimodal-demo">
+          <div class="demo-canvas-container">
+            <canvas id="multimodalCanvas"></canvas>
+          </div>
+          
+          <div class="demo-controls">
+            <button id="multimodalRestart" class="control-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+              </svg>
+              Reset
+            </button>
+            <button id="multimodalToggle" class="control-btn primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Play
+            </button>
+          </div>
+
+          <div class="aggregation-comparison">
+            <div class="comparison-item">
+              <div class="comparison-header">
+                <div class="method-badge averaging">Simple Averaging</div>
+              </div>
+              <div class="comparison-viz">
+                <div id="avgDistribution" class="distribution-viz"></div>
+              </div>
+              <div class="comparison-description">
+                <p>Averaging neighbor predictions collapses multimodal distributions into a single mode, which is oftentimes not useful.</p>
+              </div>
+            </div>
+
+            <div class="comparison-item">
+              <div class="comparison-header">
+                <div class="method-badge set-transformer">Set Transformer / DeepSets</div>
+              </div>
+              <div class="comparison-viz">
+                <div id="setDistribution" class="distribution-viz"></div>
+              </div>
+              <div class="comparison-description">
+                <p>More complex set-based aggregation preserves multimodality, enabling the model to represent multi-modal expert behaviors.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="diffusion" class="diffusion-section">
+        <div class="tagline">Compatibility with Diffusion Policy</div>
+        <div class="results-layout">
+          <!-- Carousel Side -->
+          <div class="carousel-side">
+            <p>
+              The previous results demonstrated DARP using a standard MLP backbone for the predictor function <em>f<sub>θ</sub></em>. 
+              However, DARP's architecture is not limited to simple neural networks—it naturally extends to more sophisticated 
+              policy classes.
+              <strong>DARP is fully compatible with diffusion policies</strong>, a state-of-the-art approach for visuomotor 
+              control that has shown impressive results on complex manipulation tasks. By combining DARP's retrieval-based 
+              reparameterization with diffusion's generative modeling, we achieve substantial improvements over 
+              diffusion policy alone.
+            </p>
+          </div>
+
+          <!-- Table Side -->
+          <div class="table-side">
+            <div class="results-box">
+              <h4 class="box-title">Success Rate (%)</h4>
+              <table class="results-table">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>Diffusion</th>
+                    <th>Diffusion+DARP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Stack</td>
+                    <td>52%</td>
+                    <td><strong>82%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Threading</td>
+                    <td>44%</td>
+                    <td><strong>72%</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Peg Insertion</td>
+                    <td>54%</td>
+                    <td><strong>66%</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <p class="table-note">Success rate over 100 trials. Note that the amount of data used in these diffusion experiments is less than for the Robosuite results in the Results section to normalize scores.</p>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="tagline" id="bibtex">BibTeX</div>
+    <div id="bibtex" class="bibtex-code">
+      <div class="bibtex-title">Reference</div>
+      <pre><code>@article{pfeifer2026darp,
+      title={Difference-Aware Retrieval Policies for Imitation Learning}, 
+      author={Quinn Pfeifer and Ethan Pronovost and Paarth Shah and Khimya Khetarpal and Abhishek Gupta and Siddhartha Srinivasa},
+      journal={ICLR},
+      year={2026}
+}
+      </code></pre>
+    </div>
+  </div>
+
+  <div class="footer">
+    © DARP team. Source code is available <a href="https://github.com/quinnmp/darp_site"
+      target="_blank">here</a>. Modified from the <a href="https://polaris-evals.github.io/"
+      target="_blank">PolaRiS</a> website.
+  </div>
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script src="index.js"></script>
+  <script src="hero-pipeline.js"></script>
+  <script src="divergence-section.js"></script>
+  <script src="architecture-section.js"></script>
+  <script src="multimodal-section.js"></script>
+</body>
+</html>
