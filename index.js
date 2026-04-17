@@ -104,4 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  const highlightCards = document.querySelectorAll('.highlight-card');
+  highlightCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const tab = card.dataset.tab;
+      if (tab) {
+        const btn = document.querySelector(`.domain-btn[data-tab="${tab}"]`);
+        if (btn) {
+          btn.click();
+          document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
 });
