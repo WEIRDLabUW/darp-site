@@ -256,7 +256,13 @@
       <div class="tagline">Results</div>
       <!-- Domain Selector -->
       <div class="domain-selector">
-        <button class="domain-btn active" data-tab="robocasa">
+        <button class="domain-btn active" data-tab="real-robot">
+          <span class="icon is-small">
+            <i class="fas fa-microchip"></i>
+          </span>
+          <span>Real Robot</span>
+        </button>
+        <button class="domain-btn" data-tab="robocasa">
           <span class="icon is-small">
             <i class="fas fa-home"></i>
           </span>
@@ -274,6 +280,79 @@
           </span>
           <span>MuJoCo</span>
         </button>
+      </div>
+
+      <!-- Real Robot Content -->
+      <div id="real-robot-content" class="domain-content active">
+        <div class="results-layout">
+          <!-- Video Side -->
+          <div class="carousel-side">
+            <div class="results-carousel">
+              <div class="carousel-item active">
+                <p class="slide-title">Task: FurnitureBench square_table task</p>
+                <div class="comparison-grid">
+                  <div class="comparison-video">
+                    <span class="video-tag bc-tag">Diffusion</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/real_robot/square_table_bc.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="comparison-video">
+                    <span class="video-tag darp-tag">Diffusion+DARP</span>
+                    <video autoplay muted loop playsinline>
+                      <source src="./static/videos/real_robot/square_table_darp.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart Side -->
+          <div class="table-side">
+            <div class="results-box">
+              <h4 class="box-title">Success Rate (n=50)</h4>
+              
+              <div class="bar-chart-container">
+                <div class="bar-item">
+                  <div class="bar-header">
+                    <span class="bar-name">Diffusion</span>
+                    <span class="bar-value">22/50 (44.0%)</span>
+                  </div>
+                  <div class="bar-wrapper">
+                    <div class="bar-fill bc" style="width: 44%;"></div>
+                    <!-- Wilson Score CI [31.16%, 57.69%] -->
+                    <div class="error-bar" style="left: 31.16%; width: 26.53%;"></div>
+                  </div>
+                </div>
+
+                <div class="bar-item">
+                  <div class="bar-header">
+                    <span class="bar-name">Diffusion+DARP (Ours)</span>
+                    <span class="bar-value">46/50 (92.0%)</span>
+                  </div>
+                  <div class="bar-wrapper">
+                    <div class="bar-fill darp" style="width: 92%;"></div>
+                    <!-- Wilson Score CI [81.16%, 96.85%] -->
+                    <div class="error-bar" style="left: 81.16%; width: 15.69%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <div class="legend-color bc"></div>
+                  <span>Diffusion Policy</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color darp"></div>
+                  <span>Diffusion+DARP (Ours)</span>
+                </div>
+              </div>
+              <p class="table-note">Results on real Franka Emika Panda robot. Error bars indicate 95% confidence intervals.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- MuJoCo Content -->
@@ -539,7 +618,7 @@
       </div>
 
       <!-- Robocasa Content -->
-      <div id="robocasa-content" class="domain-content active">
+      <div id="robocasa-content" class="domain-content">
         <div class="results-layout">
           <!-- Carousel Side -->
           <div class="carousel-side">
