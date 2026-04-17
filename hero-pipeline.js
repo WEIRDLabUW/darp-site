@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', resizeCanvas);
 
   let time = 0;
-  const CYCLE_DURATION = 13; 
+  const CYCLE_DURATION = 15; 
 
   const colors = {
     honeyBronze: '#d4940a',
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     ctx.clearRect(0, 0, w, h);
 
-    const cycleTime = (time % CYCLE_DURATION) / CYCLE_DURATION;
+    const cycleTime = (time % CYCLE_DURATION) / 8;
     
     const query = getQueryState(time);
     const neighbors = findKNearest(query, 4);
