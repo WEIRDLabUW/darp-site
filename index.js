@@ -105,6 +105,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const copyBtn = document.getElementById('copyBibtex');
+  if (copyBtn) {
+    const copyToClipboard = (text) => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      } else {
+        // Fallback for non-secure contexts
+        return new Promise((resolve, reject) => {
+          try {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  // Avoid scrolling to bottom
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            if (successful) resolve();
+            else reject(new Error('Fallback copy failed'));
+          } catch (err) {
+            reject(err);
+          }
+        });
+      }
+    };
+
+    copyBtn.addEventListener('click', () => {
+      const bibtexCode = document.getElementById('bibtexCode').textContent.trim();
+      copyToClipboard(bibtexCode).then(() => {
+        const span = copyBtn.querySelector('span');
+        const originalText = span.textContent;
+        span.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        
+        setTimeout(() => {
+          span.textContent = originalText;
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  }
+
   const highlightCards = document.querySelectorAll('.highlight-card');
   highlightCards.forEach(card => {
     card.addEventListener('click', () => {

@@ -951,15 +951,21 @@
     </div>
 
     <div class="tagline" id="bibtex">BibTeX</div>
-    <div id="bibtex" class="bibtex-code">
-      <div class="bibtex-title">Reference</div>
-      <pre><code>
-      @inproceedings{pfeiferdifference,
-        title={Difference-Aware Retrieval Polices for Imitation Learning},
-        author={Pfeifer, Quinn and Pronovost, Ethan and Shah, Paarth and Khetarpal, Khimya and Gupta, Abhishek and Srinivasa, Siddhartha},
-        booktitle={The Fourteenth International Conference on Learning Representations}
-        year={2026}
-      }
+    <div class="bibtex-code">
+      <div class="bibtex-header">
+        <div class="bibtex-title">Reference</div>
+        <button class="copy-btn" id="copyBibtex">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copy</span>
+        </button>
+      </div>
+      <pre><code id="bibtexCode">
+@inproceedings{pfeiferdifference,
+  title={Difference-Aware Retrieval Polices for Imitation Learning},
+  author={Pfeifer, Quinn and Pronovost, Ethan and Shah, Paarth and Khetarpal, Khimya and Gupta, Abhishek and Srinivasa, Siddhartha},
+  booktitle={The Fourteenth International Conference on Learning Representations},
+  year={2026}
+}
       </code></pre>
     </div>
   </div>

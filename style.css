@@ -542,14 +542,53 @@ h1, h2, h3, h4, h5, h6, .section-heading {
   box-shadow: var(--shadow-sm);
 }
 
+.bibtex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
 .bibtex-title {
   font-family: 'Fira Code', monospace;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-muted);
-  margin-bottom: 14px;
+  margin-bottom: 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.copy-btn.copied {
+  background: #dcfce7;
+  color: #16a34a;
+  border-color: #bbf7d0;
 }
 
 .bibtex-code pre {
